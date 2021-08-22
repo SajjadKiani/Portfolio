@@ -23,7 +23,7 @@ python manage.py migrate
 - [x] add User model
 - [x] create Sign in & Sign up page
 - [x] View the assets of the person who logged in
-- [ ] calculate person's PNL
+- [x] calculate person's PNL
 - [ ] create a page for each asset
 - [ ] improve frontend
 - [ ] ...
