@@ -1,0 +1,66 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Page</title>
+
+  <style>
+    table, th, td {
+      border: 1px solid black;
+      border-collapse: collapse;
+      text-align: center;
+    }
+
+    th, td {
+      padding: 5px;
+      text-align: left;
+    }
+
+    </style>
+</head>
+<body>
+  <div>
+    
+    <table>
+        <h3>{{ user.username }}</h3>
+
+        <tr>
+            <th>Coin name</th>
+            <th>amount</th>
+            <th>value (USD) </th>
+            <th>price (USD) </th>
+            <th>PNL </th>
+            <th>time (UTC)</th>
+        </tr>
+
+        {% for asset in info %}
+        
+          {% if asset.user.username == user.username %}
+            <tr>
+              <th>{{ asset.coin_name }}</th>            
+              <th>{{ asset.amount }}</th>            
+              <th>{{ asset.value }}</th>            
+              <th>{{ asset.price }}</th>            
+              <th>{{ asset.pnl }}</th>           
+              <th>{{ asset.time }}</th>           
+            </tr>
+          {% endif %}
+
+            
+        {% endfor %}
+
+        <tr>
+          <td>sum</td>
+          <td></td>
+          <td> {{ sum }} </td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+
+    </table>
+
+
+  </div>
+</body>
+</html>

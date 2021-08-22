@@ -1,0 +1,52 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>SignUp</title>
+
+        
+    </head>
+    <body>
+        <h1>Sign Up</h1>
+        
+        <form action="" method="POST">
+            {% csrf_token %}
+
+            <p style="color: red">{{form.errors}}</p>
+
+            <table>
+                <tr>
+                    <th>{{ form.username.label_tag }}</th>
+                    <th>{{ form.username }}</th>
+                </tr>
+                <tr>
+                    <th>{{ form.first_name.label_tag }}</th>
+                    <th>{{ form.first_name }}</th>
+                </tr>
+                <tr>
+                    <th>{{ form.last_name.label_tag }}</th>
+                    <th>{{ form.last_name }}</th>
+                </tr>
+                <tr>
+                    <th>{{ form.email.label_tag }}</th>
+                    <th>{{ form.email }}</th>
+                </tr>
+                <tr>
+                    <th>{{ form.password1.label_tag }}</th>
+                    <th>{{ form.password1 }}</th>
+                </tr>
+                <tr>
+                    <th>{{ form.password2.label_tag }}</th>
+                    <th>{{ form.password2 }}</th>
+                </tr>
+                
+                <tr><th><input type="submit" value="signUp"></th></tr>
+
+            </table>
+
+        </form>
+
+
+        
+    </body>
+</html>
