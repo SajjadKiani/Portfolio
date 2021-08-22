@@ -77,7 +77,11 @@ class Procces():
         info = []
         for i in range(len(assets)):
 
-            pnl_data = cg.get_coin_history_by_id(id=assets[i].coin_name,date='21-8-2021', localization='false')
+            date = str(assets[i].date).split('-')
+            date.reverse()
+            date = '-'.join(date)
+
+            pnl_data = cg.get_coin_history_by_id(id=assets[i].coin_name,date=date, localization='false')
             pnl_price = pnl_data['market_data']['current_price']['usd']
             pnl = round( (prices_list[i]-pnl_price)/prices_list[i]*100 ,2)
 
