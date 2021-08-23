@@ -17,10 +17,7 @@
             <p>{{form.errors}}</p>
 
             <table>
-                <tr>
-                    <th>{{ form.user.label_tag }}</th>
-                    <th>{{ form.user }}</th>
-                </tr>
+                
                 <tr>
                     <th>{{ form.coin_name.label_tag }}</th>
                     <th>{{ form.coin_name }}</th>
@@ -31,7 +28,7 @@
                 </tr>
                 <tr>
                     <th><label for="{{ form.time.id_for_label }}">time:</label></th>
-                    <th><input type="datetime-local" name="time" ></th>
+                    <th><input type="date" name="time" ></th>
                 </tr>
 
                 <tr><th><input type="submit" value="Submit"></th></tr>

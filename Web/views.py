@@ -4,6 +4,7 @@ from .models import Asset
 from .forms import AddAssetForm , SignUpForm
 from django.http import HttpResponseRedirect
 from django.contrib.auth import authenticate, login
+from django.contrib.auth.models import User
 
 cg = CoinGeckoAPI()
 
@@ -21,17 +22,18 @@ def get_profile(request):
 
 def add_asset(request):
     
+    user = request.user
+
     if request.method == 'POST':
         
         form = AddAssetForm(request.POST)
 
         if form.is_valid():
 
-            p = Asset( coin_name=form.cleaned_data['coin_name'],
-                amount=form.cleaned_data['amount'] , time=request.POST['time'] )
-            p.save()
-
-            return HttpResponseRedirect('/portfolio/')
+            Asset.objects.create( user=user , coin_name=form.cleaned_data['coin_name'],
+                amount=form.cleaned_data['amount'] , date=request.POST['time'] )
+            
+            return HttpResponseRedirect('/accounts/profile/')
     else:
         form = AddAssetForm()
 

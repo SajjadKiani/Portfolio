@@ -5,13 +5,13 @@ from django.contrib.auth.forms import UserCreationForm
 
 class AddAssetForm(forms.Form):
 
-    users = User.objects.all()
-    list = []
+    # users = User.objects.all()
+    # list = []
 
-    for u in users:
-        list.append( (u , u.username) )
+    # for u in users:
+    #     list.append( (u , u.username) )
 
-    user = forms.ChoiceField(choices = tuple(list))
+    # user = forms.ChoiceField(choices = tuple(list))
     coin_name = forms.CharField(max_length=100)
     amount = forms.IntegerField()
     time = forms.DateField()
