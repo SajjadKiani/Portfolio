@@ -16,7 +16,9 @@
               text-align: left;
             }
         
-            </style>
+        </style>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
         
     </head>
     <body>
@@ -38,7 +40,29 @@
 
         <br/><br/>
 
-        <img src="/chart.png" alt="">
+        <canvas id="myChart" style="width:100%;max-width:1000px"></canvas>
+
+        <script>
+            var xValues = {{ chart.labels }};
+            var yValues = {{ chart.prices }};
+
+            new Chart("myChart", {
+            type: "line",
+            data: {
+                labels: xValues,
+                datasets: [{
+                fill: false,
+                lineTension: 0,
+                backgroundColor: "rgba(0,0,0,0.1)",
+                borderColor: "rgba(0,0,255,0.5)",
+                data: yValues,
+                label : '{{ price_dict.coin_name }}',
+                pointBorderWidth : 0.5,
+                }]
+            },
+            
+            });
+        </script>
 
         <br/><br/>
 

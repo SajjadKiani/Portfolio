@@ -6,6 +6,7 @@ from .forms import AddAssetForm , SignUpForm
 from django.http import HttpResponseRedirect
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
+import datetime
 
 cg = CoinGeckoAPI()
 
@@ -40,16 +41,30 @@ def get_asset(request,asset):
         'volume' : mrktcap_volume[1]
     }
 
+    current_date = datetime.date.today()
+    day = int(current_date.day)
+    month = int(current_date.month)
+    year = int(current_date.year)
+
     changes_dict = {
         '1' : Data.daily_change(coin.coin_name),
-        '2' : Data.get_change(coin.coin_name,'23-8-2021'),
-        '3' : Data.get_change(coin.coin_name,'22-8-2021'),
-        '4' : Data.get_change(coin.coin_name,'18-8-2021'),
-        '5' : Data.get_change(coin.coin_name,'25-7-2021'),
-        '6' : Data.get_change(coin.coin_name,'25-8-2020'),
+        '2' : Data.get_change(coin.coin_name,'{}-{}-{}'.format(day-2,month,year)),
+        '3' : Data.get_change(coin.coin_name,'{}-{}-{}'.format(day-3,month,year)),
+        '4' : Data.get_change(coin.coin_name,'{}-{}-{}'.format(day-7,month,year)),
+        '5' : Data.get_change(coin.coin_name,'{}-{}-{}'.format(day,month-1,year)),
+        '6' : Data.get_change(coin.coin_name,'{}-{}-{}'.format(day,month,year-1)),
     }
 
-    return render(request, 'Web/asset.html' , { 'price_dict' : price_dict , 'changes_dict' : changes_dict } )
+    chart = Data.get_chart(coin.coin_name)
+
+    chart_dict = {
+        'labels' : chart[0],
+        'prices' : chart[1],
+    }
+
+    
+
+    return render(request, 'Web/asset.html' , { 'price_dict' : price_dict , 'changes_dict' : changes_dict , 'chart' : chart_dict } )
 
 def add_asset(request):
     
@@ -115,6 +130,22 @@ class Data:
 
         return  round((current_price-date_price)/current_price*100,2)
 
+    def get_chart(coin_name):
+        days = 1
+        data = cg.get_coin_market_chart_by_id(id=coin_name,vs_currency='usd',days=days)
+
+        price = data['prices']
+        # mkt_cap = data['market_caps']
+
+        labels = []
+        prices = []
+
+        for i in price:
+            labels.append(i[0])
+            prices.append(i[1])
+
+        return [labels , prices]
+
 # procces on model (db)
 class Procces:
     
@@ -144,10 +175,7 @@ class Procces:
             date.reverse()
             date = '-'.join(date)
 
-            # pnl_data = cg.get_coin_history_by_id(id=assets[i].coin_name,date=date, localization='false')
-            # pnl_price = pnl_data['market_data']['current_price']['usd']
             pnl_price = Data.get_change(coin_name=assets[i].coin_name,date=date)
-            # pnl = round( (prices_list[i]-pnl_price)/prices_list[i]*100 ,2)
 
             value = round( float(assets[i].amount) * float(prices_list[i]) , 2 )
 

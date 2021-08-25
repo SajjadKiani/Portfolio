@@ -24,7 +24,8 @@ python manage.py migrate
 - [x] create Sign in & Sign up page
 - [x] View the assets of the person who logged in
 - [x] calculate person's PNL
-- [ ] create a page for each asset
+- [x] create a page for each asset
+- [ ] search assets
 - [ ] improve frontend
 - [ ] ...
  
