@@ -1,0 +1,66 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <title> {{ price_dict.coin_name }} </title>
+
+        <style>
+            table, th, td {
+              border: 1px solid black;
+              border-collapse: collapse;
+              text-align: center;
+            }
+        
+            th, td {
+              padding: 5px;
+              text-align: left;
+            }
+        
+            </style>
+        
+    </head>
+    <body>
+        <h1> {{ price_dict.coin_name }} </h1>
+        <h2> $ {{ price_dict.price }}  </h2>
+
+        <br/><br/>
+
+        <table>
+            <tr>
+                <th>market Cap</th>
+                <th>volume</th>
+            </tr>
+            <tr>
+                <th> {{ price_dict.mktcap }} </th>
+                <th> {{ price_dict.volume }} </th>
+            </tr>
+        </table>
+
+        <br/><br/>
+
+        <img src="/chart.png" alt="">
+
+        <br/><br/>
+
+        <table>
+            <tr>
+                <th>24 h</th>
+                <th>2 D</th>
+                <th>3 D</th>
+                <th>1 W</th>
+                <th>1 M</th>
+                <th>1 Y</th>
+            </tr>
+            <tr>
+                <th> {{ changes_dict.1 }} % </th>
+                <th> {{ changes_dict.2 }} % </th>
+                <th> {{ changes_dict.3 }} % </th>
+                <th> {{ changes_dict.4 }} % </th>
+                <th> {{ changes_dict.5 }} % </th>
+                <th> {{ changes_dict.6 }} % </th>
+            </tr>
+        </table>
+
+
+    </body>
+</html>

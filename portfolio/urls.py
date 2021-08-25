@@ -18,11 +18,13 @@ from django.urls import path
 from django.urls.conf import include , include
 from Web import views
 
+app_name = 'Web'
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('add/', views.add_asset),
     path('', include('django.contrib.auth.urls') ),
     path('accounts/profile/', views.get_profile),
     path( 'signup/', views.signup_view),
-    # path( 'logout/', views.logout),
+    path( '<slug:asset>/', views.get_asset),
 ]

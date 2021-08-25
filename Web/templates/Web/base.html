@@ -37,7 +37,11 @@
         
           {% if asset.user.username == user.username %}
             <tr>
-              <th>{{ asset.coin_name }}</th>            
+              <th>
+                <a href=" /{{asset.coin_name}}/ ">
+                  {{ asset.coin_name }}
+                </a>
+              </th>            
               <th>{{ asset.amount }}</th>            
               <th>{{ asset.value }}</th>            
               <th>{{ asset.price }}</th>            

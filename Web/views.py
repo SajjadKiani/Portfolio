@@ -1,4 +1,5 @@
-from django.shortcuts import render , redirect
+from django.http.response import HttpResponse
+from django.shortcuts import get_object_or_404, render , redirect
 from pycoingecko import CoinGeckoAPI
 from .models import Asset
 from .forms import AddAssetForm , SignUpForm
@@ -19,6 +20,36 @@ def get_profile(request):
     info = Procces.get_info(assets=assets,prices_list=prices_list)
 
     return render(request,'Web/base.html',{ 'info': info[0] , 'sum' : info[1]})
+
+def get_asset(request,asset):
+    
+    data = Asset.objects.all()
+
+    # get object or 404
+    coin = ''
+    for x in data:
+        if (x.coin_name == asset):
+            coin = x
+
+    mrktcap_volume = Data.get_mrktcap_volume(coin.coin_name)
+
+    price_dict = {
+        'coin_name' : coin.coin_name,
+        'price' : Data.get_price(coin.coin_name),
+        'mktcap' : mrktcap_volume[0],
+        'volume' : mrktcap_volume[1]
+    }
+
+    changes_dict = {
+        '1' : Data.daily_change(coin.coin_name),
+        '2' : Data.get_change(coin.coin_name,'23-8-2021'),
+        '3' : Data.get_change(coin.coin_name,'22-8-2021'),
+        '4' : Data.get_change(coin.coin_name,'18-8-2021'),
+        '5' : Data.get_change(coin.coin_name,'25-7-2021'),
+        '6' : Data.get_change(coin.coin_name,'25-8-2020'),
+    }
+
+    return render(request, 'Web/asset.html' , { 'price_dict' : price_dict , 'changes_dict' : changes_dict } )
 
 def add_asset(request):
     
@@ -56,7 +87,36 @@ def signup_view(request):
         form = SignUpForm()
     return render(request, 'registration/signup.html', {'form': form})
 
-class Procces():
+# procces on API
+class Data:
+
+    def get_price(coin_name):
+        price = cg.get_price(ids=coin_name,vs_currencies='usd')
+        
+        return price[coin_name]['usd']
+
+    def daily_change(coin_name):
+        price = cg.get_price(ids=coin_name,vs_currencies='usd',include_24hr_change='true')
+        
+        return  round( float( price[coin_name]['usd_24h_change'] ) ,2)
+
+    def get_mrktcap_volume(coin_name):
+        price = cg.get_price(ids=coin_name,vs_currencies='usd', include_market_cap='true', include_24hr_vol='true')
+        
+        return [round( price[coin_name]['usd_market_cap'],2) ,round( price[coin_name]['usd_24h_vol'],2) ]
+
+
+    def get_change(coin_name,date):
+        
+        data = cg.get_coin_history_by_id(id=coin_name,date=date, localization='false')
+        date_price = data['market_data']['current_price']['usd']
+        
+        current_price = Data.get_price(coin_name)
+
+        return  round((current_price-date_price)/current_price*100,2)
+
+# procces on model (db)
+class Procces:
     
     def get_coin_names(assets):
         coin_names = []
@@ -65,6 +125,7 @@ class Procces():
 
         return coin_names
 
+    # get list of prices (All) 
     def get_prices(assets,coin_names):
         prices_dict = cg.get_price(ids=coin_names,vs_currencies='usd')
     
@@ -83,9 +144,10 @@ class Procces():
             date.reverse()
             date = '-'.join(date)
 
-            pnl_data = cg.get_coin_history_by_id(id=assets[i].coin_name,date=date, localization='false')
-            pnl_price = pnl_data['market_data']['current_price']['usd']
-            pnl = round( (prices_list[i]-pnl_price)/prices_list[i]*100 ,2)
+            # pnl_data = cg.get_coin_history_by_id(id=assets[i].coin_name,date=date, localization='false')
+            # pnl_price = pnl_data['market_data']['current_price']['usd']
+            pnl_price = Data.get_change(coin_name=assets[i].coin_name,date=date)
+            # pnl = round( (prices_list[i]-pnl_price)/prices_list[i]*100 ,2)
 
             value = round( float(assets[i].amount) * float(prices_list[i]) , 2 )
 
@@ -95,7 +157,7 @@ class Procces():
                 'amount' : assets[i].amount,
                 'value' : value,
                 'price' : prices_list[i],
-                'pnl' : '{} $  ({} %)'.format( round(pnl*value/100) ,pnl),
+                'pnl' : '{} $  ({} %)'.format( round(pnl_price*value/100) ,pnl_price),
                 'time' : assets[i].date
             })
 
