@@ -31,9 +31,13 @@ python manage.py migrate
 
 ## Urls
 [login](http://127.0.0.1:8000/login/)
+
 [Sign Up](http://127.0.0.1:8000/signup/)
+
 [add Asset](http://127.0.0.1:8000/add/)
+
 [Portfolio](http://127.0.0.1:8000/accounts/profile/)
+
 [admin](http://127.0.0.1:8000/admin/)
  
 
