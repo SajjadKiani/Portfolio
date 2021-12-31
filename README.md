@@ -1,19 +1,19 @@
 # Backend of Portfolio stats
 
+## abouts
+
+a simple portfolio management that use **CoinGeckoAPI** and calculate your profites and losts
+
+*Powered by Django*
+
 ## installation
 
-- 1
+
 ```bash
 pip install -r requirements.txt
-```
 
-- 2
-```bash
 python manage.py makemigrations
-```
 
-- 3
-```bash
 python manage.py migrate
 ```
 
